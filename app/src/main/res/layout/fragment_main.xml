@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:bind="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="portrait"
+            type="android.databinding.ObservableBoolean" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            bind:layout_weight='@{portrait ? 0 : 3}'>
+
+            <fragment
+                android:id="@+id/fragment_list"
+                android:name="net.chris.demo.guardian.ListFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            bind:layout_weight='@{portrait ? 1 : 2}'>
+
+            <fragment
+                android:id="@+id/fragment_detail"
+                android:name="net.chris.demo.guardian.DetailFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+
+    </LinearLayout>
+</layout>
+
