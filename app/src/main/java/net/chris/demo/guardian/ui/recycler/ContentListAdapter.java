@@ -21,7 +21,7 @@ import static net.chris.demo.guardian.database.Columns.WEB_URL;
 
 public class ContentListAdapter extends RecyclerView.Adapter<ContentListViewHolder> {
 
-    private DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+    private DateTimeFormatter formatter = DateTimeFormat.forPattern("dd-MM-yyyy HH:mm:ss");
 
     private LayoutInflater inflater;
     private Cursor cursor;

@@ -27,6 +27,8 @@
 -dontwarn okio.**
 -dontwarn javax.annotation.**
 
+-keepattributes *Annotation*
+
 # Platform calls Class.forName on types which do not exist on Android to determine platform.
 -dontnote retrofit2.Platform
 # Platform used when running on Java 8 VMs. Will not be used at runtime.
@@ -36,11 +38,25 @@
 # Retain declared checked exceptions for use by a Proxy instance.
 -keepattributes Exceptions
 
--keepnames class com.fasterxml.jackson.** { *; }
+-keepnames class com.fasterxml.jackson.** {*;}
+-keep class com.fasterxml.jackson.core.** {*;}
+-keep public class * extends com.fasterxml.jackson.core.**
+-keep interface com.fasterxml.jackson.core {*;}
 -dontwarn com.fasterxml.jackson.databind.**
--keep class org.codehaus.** { *; }
+-keep class com.fasterxml.jackson.databind.** {*;}
+-keep public class * extends com.fasterxml.jackson.databind.**
+-keep interface com.fasterxml.jackson.databind {*;}
+-keep class com.fasterxml.jackson.databind.ObjectMapper.<clinit>
+-keep class com.fasterxml.jackson.databind.introspect.VisibilityChecker$Std.<clinit>
+-keep class com.fasterxml.jackson.databind.introspect.VisibilityChecker$*{*;}
+-keep class org.codehaus.** {*;}
 -keepclassmembers public final enum org.codehaus.jackson.annotate.JsonAutoDetect$Visibility {
     public static final org.codehaus.jackson.annotate.JsonAutoDetect$Visibility *;
 }
 
--keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder { *; }
+-keep class * extends com.raizlabs.android.dbflow.config.DatabaseHolder {*;}
+
+-keepnames class net.chris.demo.guardian.model.* {*;}
+-keep class net.chris.demo.guardian.model.* {*;}
+-keepnames class net.chris.demo.guardian.network.response.* {*;}
+-keep class net.chris.demo.guardian.network.response.* {*;}
