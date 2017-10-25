@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 // types
 def STRING = "String"
@@ -7,11 +9,11 @@ def HTTP_URL = "okhttp3.HttpUrl"
 
 // fields
 def REQ_ENDPOINT = "REQ_ENDPOINT"
-def GUARDIAN_API_KEY = "GUARDIAN_API_KEY";
+def GUARDIAN_API_KEY = "GUARDIAN_API_KEY"
 
 // version
 def versionMajor = 1
-def versionMinor = 0
+def versionMinor = 1
 def versionPatch = 0
 
 def guardianPropertiesFile = rootProject.file("guardian.properties")
@@ -31,6 +33,7 @@ android {
         vectorDrawables.useSupportLibrary = true
         buildConfigField HTTP_URL, REQ_ENDPOINT, HTTP_URL + '.parse(' + '\"http://content.guardianapis.com/\"' + ')'
         buildConfigField STRING, GUARDIAN_API_KEY, '\"' + guardianProperties['api_key'] + '\"'
+        multiDexEnabled true
     }
     signingConfigs {
         release {
@@ -64,31 +67,32 @@ android {
     dataBinding {
         enabled = true
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/LICENSE'
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_7
-    jvmArgs '-noverify'
-    defaultMethods true
-    incremental false
+kapt {
+    generateStubs = true
+}
+
+configurations.all {
+    resolutionStrategy {
+//        force 'com.squareup:javapoet:1.9.0'
+    }
 }
 
 dependencies {
     def andorid_databinding_compiler_version = "2.3.0"
     def android_support_version = '26.+'
-    def auto_parcel_version = "0.3.1"
-    def butterknife_version = '8.8.1'
     def dagger_version = "2.4"
-    def dbflow_version = "3.0.0"
+    def dbflow_version = "4.0.1"
     def glassfish_javax_annotation_version = "10.0-b28"
+    def kotterknife_version = '0.1.0-SNAPSHOT'
     def lib_debug_version = '1.0.0'
     def lib_network_retrofit_version = '1.0.1'
     def picasso_version = '2.5.2'
@@ -107,15 +111,20 @@ dependencies {
     compile 'com.android.support:support-v4:' + android_support_version
     compile 'com.android.support:design:' + android_support_version
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:multidex:1.0.1'
+    // kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     // data binding
-    annotationProcessor "com.android.databinding:compiler:${andorid_databinding_compiler_version}"
+    kapt "com.android.databinding:compiler:${andorid_databinding_compiler_version}"
     // butterknife
-    compile 'com.jakewharton:butterknife:' + butterknife_version
-    annotationProcessor 'com.jakewharton:butterknife-compiler:' + butterknife_version
+    compile ('com.jakewharton:kotterknife:' + kotterknife_version) {
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
     // dagger2
     compile 'com.google.dagger:dagger:' + dagger_version
-    annotationProcessor 'com.google.dagger:dagger-compiler:' + dagger_version
-    compile 'org.glassfish:javax.annotation:' + glassfish_javax_annotation_version
+    kapt 'com.google.dagger:dagger-compiler:' + dagger_version
+    provided 'org.glassfish:javax.annotation:' + glassfish_javax_annotation_version
     // rxjava
     compile 'io.reactivex.rxjava2:rxjava:' + rxjava_version
     compile 'io.reactivex.rxjava2:rxandroid:' + rxandroid_version
@@ -127,15 +136,16 @@ dependencies {
     // debug
     debugCompile 'com.github.chrisfang6:lib-debug:' + lib_debug_version
     // DBFlow
-    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    kapt "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     compile "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-kotlinextensions:${dbflow_version}@aar"
+    compile "com.github.Raizlabs.DBFlow:dbflow-rx2:${dbflow_version}"
+    compile "com.github.Raizlabs.DBFlow:dbflow-rx2-kotlinextensions:${dbflow_version}"
     // stetho
     compile 'com.facebook.stetho:stetho:' + stetho_version
     compile 'com.facebook.stetho:stetho-okhttp3:' + stetho_version
-    // autoparcel
-    compile "com.github.frankiesardo:auto-parcel:${auto_parcel_version}"
-    annotationProcessor "com.github.frankiesardo:auto-parcel-processor:${auto_parcel_version}"
     // lib_network_retrofit
     compile 'com.github.chrisfang6:lib-network-retrofit:' + lib_network_retrofit_version
     // joda-time
@@ -143,4 +153,8 @@ dependencies {
     compile('net.danlew:android.joda:' + joda_time_version) {
         exclude group: 'joda-time', module: 'joda-time'
     }
+}
+repositories {
+    mavenCentral()
+    google()
 }

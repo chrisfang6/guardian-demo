@@ -33,9 +33,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".MainService"
-            android:process=":remote" />
+        <service android:name=".MainService" />
     </application>
 
 </manifest>

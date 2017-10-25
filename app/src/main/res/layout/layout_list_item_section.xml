@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{item.isSelected ? @color/color_recycler_item_background_selected : @color/color_recycler_item_background}"
+        android:background="@{item.isSelected ? @drawable/background_recycler_item_selected : @drawable/background_recycler_item}"
         android:orientation="vertical"
         android:padding="@dimen/dimen_recycler_item_section_padding">
 
@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:text="@{item.sectionName}"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:textColor="@android:color/black" />
+            android:textColor="@{item.isSelected ? @android:color/white : @android:color/black}" />
     </LinearLayout>
 </layout>
 
