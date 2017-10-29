@@ -7,6 +7,12 @@ Before building the project, please create a file named ***guardian.properties**
 ```
 api_key=Your_Guardian_API_KEY_here
 ```
+## Versions
+### version 1.1.0
+* Implemented with Kotlin
+
+### version 1.0.0
+* Basic functions implemented with Java
 
 ## Introduction
 * A Service named MainService provides methods to get Sections and Contents from Guardian search API.
